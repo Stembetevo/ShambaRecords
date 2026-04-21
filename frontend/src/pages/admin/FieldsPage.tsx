@@ -67,23 +67,31 @@ export default function FieldsPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {fields.map((field) => (
-              <TableRow key={field.id}>
-                <TableCell>{field.name}</TableCell>
-                <TableCell>{field.crop_type}</TableCell>
-                <TableCell className="capitalize">{field.stage}</TableCell>
-                <TableCell>
-                  <Badge className={statusClassName(field.status)}>{field.status}</Badge>
-                </TableCell>
-                <TableCell>{field.assigned_agent_name || 'Unassigned'}</TableCell>
-                <TableCell>{field.planting_date}</TableCell>
-                <TableCell>
-                  <Button asChild size="sm" variant="outline">
-                    <Link to={`/agent/fields/${field.id}`}>View</Link>
-                  </Button>
+            {fields.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={7} className="py-8 text-center text-muted-foreground">
+                  No fields found.
                 </TableCell>
               </TableRow>
-            ))}
+            ) : (
+              fields.map((field) => (
+                <TableRow key={field.id}>
+                  <TableCell>{field.name}</TableCell>
+                  <TableCell>{field.crop_type}</TableCell>
+                  <TableCell className="capitalize">{field.stage}</TableCell>
+                  <TableCell>
+                    <Badge className={statusClassName(field.status)}>{field.status}</Badge>
+                  </TableCell>
+                  <TableCell>{field.assigned_agent_name || 'Unassigned'}</TableCell>
+                  <TableCell>{field.planting_date}</TableCell>
+                  <TableCell>
+                    <Button asChild size="sm" variant="outline">
+                      <Link to={`/admin/fields/${field.id}`}>View</Link>
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
         </Table>
       )}

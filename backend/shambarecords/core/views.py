@@ -1,6 +1,8 @@
+from django.db.models import Case, CharField, Count, Q, Value, When
+from django.utils import timezone
 from rest_framework import generics, viewsets
 from rest_framework.decorators import action
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
@@ -56,6 +58,16 @@ class FieldViewSet(viewsets.ModelViewSet):
 			raise PermissionDenied('Only admins can create fields.')
 		serializer.save(created_by=self.request.user)
 
+	def perform_update(self, serializer):
+		if self.request.user.role != 'admin':
+			raise PermissionDenied('Only admins can update fields.')
+		serializer.save()
+
+	def perform_destroy(self, instance):
+		if self.request.user.role != 'admin':
+			raise PermissionDenied('Only admins can delete fields.')
+		instance.delete()
+
 	@action(detail=True, methods=['post'], url_path='updates')
 	def add_update(self, request, pk=None):
 		field = self.get_object()
@@ -67,6 +79,10 @@ class FieldViewSet(viewsets.ModelViewSet):
 		previous_stage = field.stage
 		new_stage = request.data.get('new_stage', field.stage)
 		note = request.data.get('note', '')
+		valid_stages = {choice for choice, _ in Field.STAGE_CHOICES}
+
+		if new_stage not in valid_stages:
+			raise ValidationError({'new_stage': 'Invalid stage value.'})
 
 		field.stage = new_stage
 		field.save()
@@ -88,26 +104,46 @@ class DashboardView(generics.GenericAPIView):
 	def get(self, request):
 		user = request.user
 		if user.role == 'admin':
-			fields = Field.objects.all()
+			queryset = Field.objects.all()
 		else:
-			fields = Field.objects.filter(assigned_agent=user)
+			queryset = Field.objects.filter(assigned_agent=user)
 
-		statuses = [f.status for f in fields]
-		stages = [f.stage for f in fields]
+		today = timezone.localdate()
+		status_annotated = queryset.annotate(
+			status_bucket=Case(
+				When(stage='harvested', then=Value('completed')),
+				When(stage='planted', planting_date__lt=today - timezone.timedelta(days=14), then=Value('at_risk')),
+				When(stage='growing', planting_date__lt=today - timezone.timedelta(days=90), then=Value('at_risk')),
+				When(stage='ready', planting_date__lt=today - timezone.timedelta(days=120), then=Value('at_risk')),
+				default=Value('active'),
+				output_field=CharField(),
+			)
+		)
+
+		aggregated = status_annotated.aggregate(
+			total=Count('id'),
+			active=Count('id', filter=Q(status_bucket='active')),
+			at_risk=Count('id', filter=Q(status_bucket='at_risk')),
+			completed=Count('id', filter=Q(status_bucket='completed')),
+			planted=Count('id', filter=Q(stage='planted')),
+			growing=Count('id', filter=Q(stage='growing')),
+			ready=Count('id', filter=Q(stage='ready')),
+			harvested=Count('id', filter=Q(stage='harvested')),
+		)
 
 		return Response(
 			{
-				'total': len(fields),
+				'total': aggregated['total'],
 				'by_status': {
-					'active': statuses.count('active'),
-					'at_risk': statuses.count('at_risk'),
-					'completed': statuses.count('completed'),
+					'active': aggregated['active'],
+					'at_risk': aggregated['at_risk'],
+					'completed': aggregated['completed'],
 				},
 				'by_stage': {
-					'planted': stages.count('planted'),
-					'growing': stages.count('growing'),
-					'ready': stages.count('ready'),
-					'harvested': stages.count('harvested'),
+					'planted': aggregated['planted'],
+					'growing': aggregated['growing'],
+					'ready': aggregated['ready'],
+					'harvested': aggregated['harvested'],
 				},
 			}
 		)

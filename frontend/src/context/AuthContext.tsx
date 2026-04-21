@@ -41,9 +41,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const login = async (username: string, password: string) => {
     await loginRequest(username, password)
 
-    const me = await getMe()
-    setUser(me)
-    return me
+    try {
+      const me = await getMe()
+      setUser(me)
+      return me
+    } catch (error) {
+      localStorage.removeItem('access_token')
+      localStorage.removeItem('refresh_token')
+      setUser(null)
+      throw error
+    }
   }
 
   const logout = () => {

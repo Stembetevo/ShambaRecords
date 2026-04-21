@@ -7,6 +7,8 @@ import django.utils.timezone
 from django.conf import settings
 from django.db import migrations, models
 
+STAGE_CHOICES = [('planted', 'Planted'), ('growing', 'Growing'), ('ready', 'Ready'), ('harvested', 'Harvested')]
+
 
 class Migration(migrations.Migration):
 
@@ -51,19 +53,19 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=255)),
                 ('crop_type', models.CharField(max_length=255)),
                 ('planting_date', models.DateField()),
-                ('stage', models.CharField(choices=[('planted', 'Planted'), ('growing', 'Growing'), ('ready', 'Ready'), ('harvested', 'Harvested')], default='planted', max_length=20)),
+                ('stage', models.CharField(choices=STAGE_CHOICES, default='planted', max_length=20)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('updated_at', models.DateTimeField(auto_now=True)),
                 ('assigned_agent', models.ForeignKey(blank=True, limit_choices_to={'role': 'agent'}, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='assigned_fields', to=settings.AUTH_USER_MODEL)),
-                ('created_by', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='created_fields', to=settings.AUTH_USER_MODEL)),
+                ('created_by', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='created_fields', to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.CreateModel(
             name='FieldUpdate',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('previous_stage', models.CharField(blank=True, max_length=20)),
-                ('new_stage', models.CharField(max_length=20)),
+                ('previous_stage', models.CharField(blank=True, choices=STAGE_CHOICES, max_length=20)),
+                ('new_stage', models.CharField(choices=STAGE_CHOICES, max_length=20)),
                 ('note', models.TextField(blank=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('agent', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='updates', to=settings.AUTH_USER_MODEL)),

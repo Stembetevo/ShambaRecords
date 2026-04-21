@@ -24,7 +24,7 @@ export default function AdminDashboard() {
 
         const updates = fields
           .flatMap((field) =>
-            field.updates.map((update) => ({
+            (field.updates ?? []).map((update) => ({
               ...update,
               fieldName: field.name,
             })),

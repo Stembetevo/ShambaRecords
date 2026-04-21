@@ -77,24 +77,35 @@ export default function AgentDashboard() {
         {error && <p className="text-red-600">{error}</p>}
 
         {!loading && !error && (
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-            {fields.map((field) => (
-              <Card key={field.id}>
-                <CardHeader>
-                  <CardTitle>{field.name}</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <p className="text-sm text-muted-foreground">{field.crop_type}</p>
-                  <Badge className={stageBadgeClass(field.stage)}>{field.stage}</Badge>
-                  <div>
-                    <Button asChild size="sm" variant="outline">
-                      <Link to={`/agent/fields/${field.id}`}>View</Link>
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          fields.length === 0 ? (
+            <Card>
+              <CardHeader>
+                <CardTitle>No fields assigned</CardTitle>
+              </CardHeader>
+              <CardContent className="text-sm text-muted-foreground">
+                You do not have assigned fields yet. Check back later.
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              {fields.map((field) => (
+                <Card key={field.id}>
+                  <CardHeader>
+                    <CardTitle>{field.name}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-2">
+                    <p className="text-sm text-muted-foreground">{field.crop_type}</p>
+                    <Badge className={stageBadgeClass(field.stage)}>{field.stage}</Badge>
+                    <div>
+                      <Button asChild size="sm" variant="outline">
+                        <Link to={`/agent/fields/${field.id}`}>View</Link>
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          )
         )}
       </div>
     </section>

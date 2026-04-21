@@ -1,5 +1,8 @@
+import os
+import secrets
 from datetime import date, timedelta
 
+from django.conf import settings
 from django.core.management.base import BaseCommand
 
 from core.models import Field, User
@@ -9,30 +12,52 @@ class Command(BaseCommand):
     help = 'Seed database with admin, agents, and sample fields'
 
     def handle(self, *args, **options):
-        admin_user, _ = User.objects.get_or_create(
+        django_env = os.getenv('DJANGO_ENV', '').strip().lower()
+        can_set_passwords = settings.DEBUG and django_env != 'production'
+
+        admin_user, created = User.objects.get_or_create(
             username='admin',
             defaults={
                 'email': 'admin@shamba.local',
                 'first_name': 'System',
                 'last_name': 'Admin',
                 'role': 'admin',
+                'is_staff': True,
+                'is_superuser': True,
             },
         )
         admin_user.role = 'admin'
         admin_user.is_staff = True
         admin_user.is_superuser = True
-        admin_user.set_password('admin1234')
+
+        if created:
+            if can_set_passwords:
+                generated_password = secrets.token_urlsafe(12)
+                admin_user.set_password(generated_password)
+                self.stdout.write(
+                    self.style.WARNING(
+                        f'Created admin user "admin" with generated password: {generated_password}'
+                    )
+                )
+            else:
+                admin_user.set_unusable_password()
+                self.stdout.write(
+                    self.style.WARNING(
+                        'Created admin user "admin" with unusable password because environment is production-like.'
+                    )
+                )
+
         admin_user.save()
 
         agent_specs = [
-            ('agent1', 'agent1234', 'Amina', 'Njeri'),
-            ('agent2', 'agent2234', 'Brian', 'Otieno'),
-            ('agent3', 'agent3234', 'Cynthia', 'Kamau'),
+            ('agent1', 'Amina', 'Njeri'),
+            ('agent2', 'Brian', 'Otieno'),
+            ('agent3', 'Cynthia', 'Kamau'),
         ]
 
         agents = []
-        for username, password, first_name, last_name in agent_specs:
-            agent, _ = User.objects.get_or_create(
+        for username, first_name, last_name in agent_specs:
+            agent, created = User.objects.get_or_create(
                 username=username,
                 defaults={
                     'email': f'{username}@shamba.local',
@@ -41,9 +66,25 @@ class Command(BaseCommand):
                     'role': 'agent',
                 },
             )
-            agent.role = 'agent'
-            agent.set_password(password)
-            agent.save()
+
+            if created:
+                if can_set_passwords:
+                    generated_password = secrets.token_urlsafe(12)
+                    agent.set_password(generated_password)
+                    self.stdout.write(
+                        self.style.WARNING(
+                            f'Created agent user "{username}" with generated password: {generated_password}'
+                        )
+                    )
+                else:
+                    agent.set_unusable_password()
+                    self.stdout.write(
+                        self.style.WARNING(
+                            f'Created agent user "{username}" with unusable password because environment is production-like.'
+                        )
+                    )
+                agent.save()
+
             agents.append(agent)
 
         field_specs = [

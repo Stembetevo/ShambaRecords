@@ -14,14 +14,20 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password', 'first_name', 'last_name', 'role']
+        fields = ['username', 'email', 'password', 'first_name', 'last_name']
 
     def create(self, validated_data):
-        return User.objects.create_user(**validated_data)
+        validated_data.pop('role', None)
+        return User.objects.create_user(**validated_data, role='agent')
 
 
 class FieldUpdateSerializer(serializers.ModelSerializer):
-    agent_name = serializers.CharField(source='agent.get_full_name', read_only=True)
+    agent_name = serializers.SerializerMethodField()
+
+    def get_agent_name(self, obj):
+        if not obj.agent:
+            return None
+        return obj.agent.get_full_name()
 
     class Meta:
         model = FieldUpdate

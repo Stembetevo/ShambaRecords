@@ -3,7 +3,9 @@ import { Button } from '@/components/ui/button'
 
 export function TopBar() {
   const { user, logout } = useAuth()
-  const displayName = user ? `${user.first_name} ${user.last_name}`.trim() || user.username : 'Guest'
+  const displayName = user
+    ? [user.first_name, user.last_name].filter(Boolean).join(' ') || user.username || 'Guest'
+    : 'Guest'
 
   return (
     <header className="flex items-center justify-between border-b p-4">

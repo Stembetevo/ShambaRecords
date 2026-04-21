@@ -27,11 +27,18 @@ export default function FieldDetailPage() {
 
   useEffect(() => {
     async function loadField() {
-      if (!id) return
       setLoading(true)
       setError('')
+
+      const numericId = Number(id)
+      if (!id || Number.isNaN(numericId) || !Number.isFinite(numericId)) {
+        setError('Invalid field id.')
+        setLoading(false)
+        return
+      }
+
       try {
-        const data = await getField(Number(id))
+        const data = await getField(numericId)
         setField(data)
         setNewStage(data.stage)
       } catch {
@@ -74,6 +81,8 @@ export default function FieldDetailPage() {
   if (!field) {
     return <section className="text-red-600">{error || 'Field not found.'}</section>
   }
+
+  const updates = field.updates ?? []
 
   return (
     <section className="space-y-6">
@@ -136,11 +145,11 @@ export default function FieldDetailPage() {
           <CardTitle>Update History</CardTitle>
         </CardHeader>
         <CardContent>
-          {field.updates.length === 0 ? (
+          {updates.length === 0 ? (
             <p className="text-sm text-muted-foreground">No updates yet.</p>
           ) : (
             <ul className="space-y-3">
-              {field.updates.map((update) => (
+              {updates.map((update) => (
                 <li key={update.id} className="rounded-lg border p-3">
                   <p className="text-sm text-muted-foreground">{new Date(update.created_at).toLocaleString()}</p>
                   <p className="font-medium capitalize">{update.previous_stage}{' -> '}{update.new_stage}</p>

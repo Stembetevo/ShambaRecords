@@ -91,9 +91,9 @@ export default function CreateFieldPage() {
             </div>
 
             <div className="space-y-2">
-              <Label>Stage</Label>
+              <Label htmlFor="stage-select">Stage</Label>
               <Select value={stage} onValueChange={(value) => setStage(value as FieldStage)}>
-                <SelectTrigger className="w-full">
+                <SelectTrigger id="stage-select" className="w-full">
                   <SelectValue placeholder="Select stage" />
                 </SelectTrigger>
                 <SelectContent>
@@ -107,9 +107,9 @@ export default function CreateFieldPage() {
             </div>
 
             <div className="space-y-2">
-              <Label>Assigned agent</Label>
+              <Label htmlFor="assigned-agent-select">Assigned agent</Label>
               <Select value={assignedAgent} onValueChange={setAssignedAgent}>
-                <SelectTrigger className="w-full" disabled={loadingAgents}>
+                <SelectTrigger id="assigned-agent-select" className="w-full" disabled={loadingAgents}>
                   <SelectValue placeholder={loadingAgents ? 'Loading agents...' : 'Select agent'} />
                 </SelectTrigger>
                 <SelectContent>

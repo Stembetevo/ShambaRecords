@@ -37,6 +37,7 @@ class Field(models.Model):
 		User,
 		on_delete=models.SET_NULL,
 		null=True,
+		blank=True,
 		related_name='created_fields',
 	)
 	created_at = models.DateTimeField(auto_now_add=True)
@@ -69,8 +70,8 @@ class Field(models.Model):
 class FieldUpdate(models.Model):
 	field = models.ForeignKey(Field, on_delete=models.CASCADE, related_name='updates')
 	agent = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='updates')
-	previous_stage = models.CharField(max_length=20, blank=True)
-	new_stage = models.CharField(max_length=20)
+	previous_stage = models.CharField(max_length=20, choices=Field.STAGE_CHOICES, blank=True)
+	new_stage = models.CharField(max_length=20, choices=Field.STAGE_CHOICES)
 	note = models.TextField(blank=True)
 	created_at = models.DateTimeField(auto_now_add=True)
 

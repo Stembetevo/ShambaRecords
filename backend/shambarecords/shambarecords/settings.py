@@ -5,6 +5,7 @@ from datetime import timedelta
 from pathlib import Path
 from urllib.parse import unquote, urlparse
 
+from django.core.exceptions import ImproperlyConfigured
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -18,6 +19,9 @@ load_dotenv(BASE_DIR.parent / '.env')
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 SECRET_KEY = os.getenv('SECRET_KEY')
+if not SECRET_KEY:
+    raise ImproperlyConfigured('SECRET_KEY environment variable is not set')
+
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
 ALLOWED_HOSTS = [host for host in os.getenv('ALLOWED_HOSTS', '').split(',') if host]
 
@@ -80,7 +84,9 @@ if database_url:
         'postgresql': 'django.db.backends.postgresql',
         'sqlite': 'django.db.backends.sqlite3',
     }
-    engine = engine_map.get(parsed.scheme, 'django.db.backends.postgresql')
+    if parsed.scheme not in engine_map:
+        raise ImproperlyConfigured(f'Unsupported DATABASE_URL scheme: {parsed.scheme}')
+    engine = engine_map[parsed.scheme]
 
     if engine == 'django.db.backends.sqlite3':
         db_name = unquote(parsed.path[1:]) if parsed.path else BASE_DIR / 'db.sqlite3'
