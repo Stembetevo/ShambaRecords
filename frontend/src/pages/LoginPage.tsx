@@ -35,69 +35,92 @@ export default function LoginPage() {
   }
 
   return (
-    <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-green-50 px-4 py-12">
-      <Card className="w-full max-w-md shadow-lg">
-        <CardHeader className="bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-t-lg">
-          <CardTitle className="text-2xl">Admin Login</CardTitle>
-          <CardDescription className="text-blue-100">
-            Access your Shamba Records admin dashboard.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="mt-6">
-          <form onSubmit={onSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="username">Username</Label>
-              <Input
-                id="username"
-                value={username}
-                onChange={(event) => setUsername(event.target.value)}
-                placeholder="Enter your username"
-                required
-              />
+    <section className="min-h-screen bg-white px-4 py-10 text-black sm:px-6 lg:px-8">
+      <div className="mx-auto grid w-full max-w-7xl gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+        <div className="relative flex flex-col justify-between overflow-hidden rounded-3xl border border-white/10 bg-[url('/1garden.jpg')] bg-cover bg-center p-8 shadow-2xl lg:min-h-[calc(100vh-5rem)]">
+          <div className="absolute inset-0 rounded-3xl bg-slate-950/65" />
+          <div className="relative z-10">
+            <h1 className="mt-6 max-w-md text-4xl font-semibold tracking-tight text-white sm:text-5xl">
+              Welcome back to FarmSync
+            </h1>
+            <p className="mt-4 max-w-md text-base leading-7 text-white/80">
+              Sign in once and continue your workflow, whether you are an agent updating field activity or an admin managing operations.
+            </p>
+          </div>
+
+          <div className="relative z-10 mt-8 grid gap-3 text-sm text-white/85 sm:grid-cols-2">
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
+              Agent access
             </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-                placeholder="Enter your password"
-                required
-              />
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur">
+              Admin access
             </div>
+          </div>
+        </div>
 
-            {error && <p className="text-sm text-red-600 bg-red-50 p-3 rounded">{error}</p>}
-
-            <Button
-              type="submit"
-              disabled={submitting}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 text-base font-semibold"
-            >
-              {submitting ? 'Signing in...' : 'Login'}
-            </Button>
-
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300" />
+        <Card className="border-black bg-white shadow-xl">
+          <CardHeader className="space-y-2 border-b border-black/15 pb-5 text-left">
+            <CardTitle className="text-2xl text-black">Login</CardTitle>
+            <CardDescription className="text-black/75">
+              This login is for both agents and admins. You will be redirected to the correct dashboard automatically.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="mt-2 p-6">
+            <form onSubmit={onSubmit} className="space-y-4">
+              <div className="space-y-2 text-left">
+                <Label htmlFor="username" className="text-black">Username</Label>
+                <Input
+                  id="username"
+                  value={username}
+                  onChange={(event) => setUsername(event.target.value)}
+                  placeholder="Enter your username"
+                  required
+                />
               </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">Not an admin?</span>
-              </div>
-            </div>
 
-            <Button
-              type="button"
-              variant="outline"
-              className="w-full"
-              onClick={() => navigate('/register')}
-            >
-              Register as Agent
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
+              <div className="space-y-2 text-left">
+                <Label htmlFor="password" className="text-black">Password</Label>
+                <Input
+                  id="password"
+                  type="password"
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  placeholder="Enter your password"
+                  required
+                />
+              </div>
+
+              {error && <p className="rounded-lg bg-red-100 p-3 text-sm text-red-700">{error}</p>}
+
+              <Button
+                type="submit"
+                disabled={submitting}
+                className="w-full bg-[#41b332] py-6 text-base font-semibold text-white hover:bg-[#389c2a]"
+              >
+                {submitting ? 'Signing in...' : 'Sign In'}
+              </Button>
+
+              <div className="relative py-2">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-black/15" />
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="bg-white px-2 text-black/65">Need an agent account?</span>
+                </div>
+              </div>
+
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full border-black text-black"
+                onClick={() => navigate('/register')}
+              >
+                Go to Register
+              </Button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
     </section>
   )
 }
