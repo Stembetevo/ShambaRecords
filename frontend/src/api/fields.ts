@@ -19,7 +19,7 @@ export async function getFields(): Promise<Field[]> {
   return response.data
 }
 
-export async function getField(fieldId: number): Promise<Field> {
+export async function getField(fieldId: string): Promise<Field> {
   const response = await api.get<Field>(`/fields/${fieldId}/`)
   return response.data
 }
@@ -29,7 +29,7 @@ export async function createField(data: CreateFieldData): Promise<Field> {
   return response.data
 }
 
-export async function addFieldUpdate(fieldId: number, data: AddFieldUpdateData): Promise<FieldUpdate> {
+export async function addFieldUpdate(fieldId: string, data: AddFieldUpdateData): Promise<FieldUpdate> {
   const response = await api.post<FieldUpdate>(`/fields/${fieldId}/updates/`, data)
   return response.data
 }

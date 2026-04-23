@@ -62,48 +62,52 @@ export default function CreateFieldPage() {
   }
 
   return (
-    <section className="max-w-2xl">
-      <Card>
+    <section className="mx-auto w-full max-w-3xl">
+      <Card className="border-black/10 bg-white shadow-sm">
         <CardHeader>
-          <CardTitle>Create Field</CardTitle>
+          <CardTitle className="text-black">Create Field</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={onSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="field-name">Field name</Label>
-              <Input id="field-name" value={name} onChange={(e) => setName(e.target.value)} required />
+          <form onSubmit={onSubmit} className="space-y-4 md:space-y-5">
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="space-y-2">
+                <Label htmlFor="field-name">Field name</Label>
+                <Input id="field-name" value={name} onChange={(e) => setName(e.target.value)} required />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="crop-type">Crop type</Label>
+                <Input id="crop-type" value={cropType} onChange={(e) => setCropType(e.target.value)} required />
+              </div>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="crop-type">Crop type</Label>
-              <Input id="crop-type" value={cropType} onChange={(e) => setCropType(e.target.value)} required />
-            </div>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="space-y-2">
+                <Label htmlFor="planting-date">Planting date</Label>
+                <Input
+                  id="planting-date"
+                  type="date"
+                  value={plantingDate}
+                  onChange={(e) => setPlantingDate(e.target.value)}
+                  required
+                />
+              </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="planting-date">Planting date</Label>
-              <Input
-                id="planting-date"
-                type="date"
-                value={plantingDate}
-                onChange={(e) => setPlantingDate(e.target.value)}
-                required
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="stage-select">Stage</Label>
-              <Select value={stage} onValueChange={(value) => setStage(value as FieldStage)}>
-                <SelectTrigger id="stage-select" className="w-full">
-                  <SelectValue placeholder="Select stage" />
-                </SelectTrigger>
-                <SelectContent>
-                  {STAGES.map((option) => (
-                    <SelectItem key={option} value={option}>
-                      {option}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <div className="space-y-2">
+                <Label htmlFor="stage-select">Stage</Label>
+                <Select value={stage} onValueChange={(value) => setStage(value as FieldStage)}>
+                  <SelectTrigger id="stage-select" className="w-full">
+                    <SelectValue placeholder="Select stage" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {STAGES.map((option) => (
+                      <SelectItem key={option} value={option}>
+                        {option}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
 
             <div className="space-y-2">
@@ -127,9 +131,14 @@ export default function CreateFieldPage() {
 
             {error && <p className="text-sm text-red-600">{error}</p>}
 
-            <Button type="submit" disabled={submitting}>
-              {submitting ? 'Creating...' : 'Create Field'}
-            </Button>
+            <div className="flex flex-col gap-2 sm:flex-row sm:justify-end">
+              <Button type="button" variant="outline" onClick={() => navigate('/admin/fields')}>
+                Cancel
+              </Button>
+              <Button type="submit" disabled={submitting}>
+                {submitting ? 'Creating...' : 'Create Field'}
+              </Button>
+            </div>
           </form>
         </CardContent>
       </Card>

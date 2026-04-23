@@ -20,7 +20,7 @@ export interface FieldUpdate {
 }
 
 export interface Field {
-  id: number
+  id: string
   name: string
   crop_type: string
   planting_date: string

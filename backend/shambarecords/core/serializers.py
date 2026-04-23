@@ -35,6 +35,7 @@ class FieldUpdateSerializer(serializers.ModelSerializer):
 
 
 class FieldSerializer(serializers.ModelSerializer):
+    id = serializers.UUIDField(source='public_id', read_only=True)
     status = serializers.ReadOnlyField()
     assigned_agent_name = serializers.CharField(source='assigned_agent.get_full_name', read_only=True)
     updates = FieldUpdateSerializer(many=True, read_only=True)
@@ -59,6 +60,7 @@ class FieldSerializer(serializers.ModelSerializer):
 class FieldListSerializer(serializers.ModelSerializer):
     """Lighter serializer for list views - no nested updates."""
 
+    id = serializers.UUIDField(source='public_id', read_only=True)
     status = serializers.ReadOnlyField()
     assigned_agent_name = serializers.CharField(source='assigned_agent.get_full_name', read_only=True)
 

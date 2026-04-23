@@ -30,15 +30,14 @@ export default function FieldDetailPage() {
       setLoading(true)
       setError('')
 
-      const numericId = Number(id)
-      if (!id || Number.isNaN(numericId) || !Number.isFinite(numericId)) {
+      if (!id) {
         setError('Invalid field id.')
         setLoading(false)
         return
       }
 
       try {
-        const data = await getField(numericId)
+        const data = await getField(id)
         setField(data)
         setNewStage(data.stage)
       } catch {

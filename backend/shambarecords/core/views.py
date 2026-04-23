@@ -41,6 +41,8 @@ class AgentListView(generics.ListAPIView):
 
 class FieldViewSet(viewsets.ModelViewSet):
 	permission_classes = [IsAuthenticated]
+	lookup_field = 'public_id'
+	lookup_value_regex = '[0-9a-fA-F-]{36}'
 
 	def get_serializer_class(self):
 		if self.action == 'list':

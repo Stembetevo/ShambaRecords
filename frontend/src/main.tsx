@@ -20,6 +20,7 @@ import CreateFieldPage from '@/pages/admin/CreateFieldPage'
 import AgentDashboard from '@/pages/agent/AgentDashboard'
 import MyFieldsPage from '@/pages/agent/MyFieldsPage'
 import FieldDetailPage from '@/pages/agent/FieldDetailPage'
+import AgentCreateFieldPage from '@/pages/agent/AgentCreateFieldPage'
 
 type Role = 'admin' | 'agent'
 
@@ -63,6 +64,7 @@ createRoot(document.getElementById('root')!).render(
             <Route element={<AppLayout />}>
               <Route path="/agent/dashboard" element={<AgentDashboard />} />
               <Route path="/agent/fields" element={<MyFieldsPage />} />
+              <Route path="/agent/fields/new" element={<AgentCreateFieldPage />} />
               <Route path="/agent/fields/:id" element={<FieldDetailPage />} />
             </Route>
           </Route>

@@ -53,7 +53,7 @@ export default function AdminDashboard() {
   }, [stats])
 
   if (loading) {
-    return <section className="p-2">Loading dashboard...</section>
+    return <section className="p-2 text-black">Loading dashboard...</section>
   }
 
   if (error || !stats) {
@@ -62,36 +62,36 @@ export default function AdminDashboard() {
 
   return (
     <section className="space-y-6">
-      <h1 className="text-2xl font-semibold">Admin Dashboard</h1>
+      <h1 className="text-2xl font-semibold text-black">Admin Dashboard</h1>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        <Card>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <Card className="border-black/10 bg-white shadow-sm">
           <CardHeader>
             <CardTitle>Total Fields</CardTitle>
           </CardHeader>
-          <CardContent className="text-3xl font-semibold">{stats.total}</CardContent>
+          <CardContent className="text-2xl font-semibold sm:text-3xl">{stats.total}</CardContent>
         </Card>
-        <Card>
+        <Card className="border-black/10 bg-white shadow-sm">
           <CardHeader>
             <CardTitle>At Risk</CardTitle>
           </CardHeader>
-          <CardContent className="text-3xl font-semibold text-amber-600">{stats.by_status.at_risk}</CardContent>
+          <CardContent className="text-2xl font-semibold text-amber-600 sm:text-3xl">{stats.by_status.at_risk}</CardContent>
         </Card>
-        <Card>
+        <Card className="border-black/10 bg-white shadow-sm sm:col-span-2 lg:col-span-1">
           <CardHeader>
             <CardTitle>Completed</CardTitle>
           </CardHeader>
-          <CardContent className="text-3xl font-semibold text-slate-700">{stats.by_status.completed}</CardContent>
+          <CardContent className="text-2xl font-semibold text-slate-700 sm:text-3xl">{stats.by_status.completed}</CardContent>
         </Card>
       </div>
 
-      <Card>
+      <Card className="border-black/10 bg-white shadow-sm">
         <CardHeader>
           <CardTitle>Stage Breakdown</CardTitle>
         </CardHeader>
-        <CardContent className="grid grid-cols-2 gap-4 md:grid-cols-4">
+        <CardContent className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
           {stageEntries.map((entry) => (
-            <div key={entry.label} className="rounded-lg border p-3 text-center">
+            <div key={entry.label} className="rounded-lg border border-black/10 p-3 text-center">
               <p className="text-xs uppercase tracking-wide text-muted-foreground">{entry.label}</p>
               <p className="mt-1 text-2xl font-semibold">{entry.value}</p>
             </div>
@@ -99,7 +99,7 @@ export default function AdminDashboard() {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="border-black/10 bg-white shadow-sm">
         <CardHeader>
           <CardTitle>Recent Activity</CardTitle>
         </CardHeader>
@@ -109,7 +109,7 @@ export default function AdminDashboard() {
           ) : (
             <ul className="space-y-3">
               {recentActivity.map((item) => (
-                <li key={item.id} className="rounded-lg border p-3">
+                <li key={item.id} className="rounded-lg border border-black/10 p-3 sm:p-4">
                   <p className="font-medium">{item.fieldName}</p>
                   <p className="text-sm text-muted-foreground">
                     {item.previous_stage} to {item.new_stage} by {item.agent_name || 'Unknown'}
