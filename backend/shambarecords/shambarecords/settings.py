@@ -23,7 +23,7 @@ if not SECRET_KEY:
     raise ImproperlyConfigured('SECRET_KEY environment variable is not set')
 
 DEBUG = os.getenv('DEBUG', 'False') == 'True'
-ALLOWED_HOSTS = [host for host in os.getenv('ALLOWED_HOSTS', '').split(',') if host]
+ALLOWED_HOSTS = 'https://shamba-records-teal.vercel.app/'
 
 
 # Application definition
