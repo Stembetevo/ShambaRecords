@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 
 const STAGES: FieldStage[] = ['planted', 'growing', 'ready', 'harvested']
 
-export default function AgentCreateFieldPage() {
+export default function AdminCreateFieldPage() {
   const navigate = useNavigate()
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
@@ -42,7 +42,7 @@ export default function AgentCreateFieldPage() {
   }
 
   return (
-    <section className="max-w-2xl text-black">
+    <section className="mx-auto w-full max-w-2xl text-black">
       <Card className="border-black/15 bg-white shadow-sm">
         <CardHeader className="border-b border-black/10">
           <CardTitle className="text-2xl">Add Field</CardTitle>
@@ -76,9 +76,13 @@ export default function AgentCreateFieldPage() {
                 <SelectTrigger id="stage-select" className="w-full border-black/20">
                   <SelectValue placeholder="Select stage" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-white text-black">
                   {STAGES.map((option) => (
-                    <SelectItem key={option} value={option}>
+                    <SelectItem
+                      key={option}
+                      value={option}
+                      className="text-black data-[highlighted]:bg-slate-100 data-[highlighted]:text-black cursor-pointer"
+                    >
                       {option}
                     </SelectItem>
                   ))}

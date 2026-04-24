@@ -44,10 +44,8 @@ export default function FieldsPage() {
   return (
     <section className="space-y-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">Fields</h1>
-        <Button asChild>
-          <Link to="/admin/fields/new">New Field</Link>
-        </Button>
+        <h1 className="text-2xl text-black font-semibold">Fields</h1>
+        
       </div>
 
       {loading && <p>Loading fields...</p>}
