@@ -37,8 +37,15 @@ class FieldUpdateSerializer(serializers.ModelSerializer):
 class FieldSerializer(serializers.ModelSerializer):
     id = serializers.UUIDField(source='public_id', read_only=True)
     status = serializers.ReadOnlyField()
-    assigned_agent_name = serializers.CharField(source='assigned_agent.get_full_name', read_only=True)
+    assigned_agent_name = serializers.SerializerMethodField()
     updates = FieldUpdateSerializer(many=True, read_only=True)
+
+    def get_assigned_agent_name(self, obj):
+        if not obj.assigned_agent:
+            return None
+
+        full_name = obj.assigned_agent.get_full_name().strip()
+        return full_name or obj.assigned_agent.username
 
     class Meta:
         model = Field
@@ -62,7 +69,14 @@ class FieldListSerializer(serializers.ModelSerializer):
 
     id = serializers.UUIDField(source='public_id', read_only=True)
     status = serializers.ReadOnlyField()
-    assigned_agent_name = serializers.CharField(source='assigned_agent.get_full_name', read_only=True)
+    assigned_agent_name = serializers.SerializerMethodField()
+
+    def get_assigned_agent_name(self, obj):
+        if not obj.assigned_agent:
+            return None
+
+        full_name = obj.assigned_agent.get_full_name().strip()
+        return full_name or obj.assigned_agent.username
 
     class Meta:
         model = Field

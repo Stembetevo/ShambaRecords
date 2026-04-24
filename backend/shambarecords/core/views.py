@@ -71,7 +71,7 @@ class FieldViewSet(viewsets.ModelViewSet):
 		instance.delete()
 
 	@action(detail=True, methods=['post'], url_path='updates')
-	def add_update(self, request, pk=None):
+	def add_update(self, request, public_id=None):
 		field = self.get_object()
 		user = request.user
 

@@ -56,6 +56,7 @@ createRoot(document.getElementById('root')!).render(
               <Route path="/admin/dashboard" element={<AdminDashboard />} />
               <Route path="/admin/fields" element={<FieldsPage />} />
               <Route path="/admin/fields/new" element={<CreateFieldPage />} />
+              <Route path="/admin/fields/:id" element={<FieldDetailPage />} />
             </Route>
           </Route>
 

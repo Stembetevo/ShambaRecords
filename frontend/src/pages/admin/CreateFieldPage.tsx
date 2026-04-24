@@ -135,7 +135,8 @@ export default function CreateFieldPage() {
               <Button type="button" variant="outline" onClick={() => navigate('/admin/fields')}>
                 Cancel
               </Button>
-              <Button type="submit" disabled={submitting}>
+
+              <Button className='bg-[#41b332] text-white hover:bg-[#389c2a]' type="submit" disabled={submitting}>
                 {submitting ? 'Creating...' : 'Create Field'}
               </Button>
             </div>

@@ -84,35 +84,43 @@ export default function FieldDetailPage() {
   const updates = field.updates ?? []
 
   return (
-    <section className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>{field.name}</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-2">
-          <p><span className="font-medium">Crop type:</span> {field.crop_type}</p>
-          <p><span className="font-medium">Planting date:</span> {field.planting_date}</p>
-          <p><span className="font-medium">Current stage:</span> <span className="capitalize">{field.stage}</span></p>
-          <div>
-            <Badge className={statusClassName(field.status)}>{field.status}</Badge>
+    <section className="space-y-8 text-black">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+        <div className="space-y-5">
+          <h1 className="text-3xl text-black font-semibold tracking-tight sm:text-4xl">{field.name}</h1>
+          <div className="space-y-4 text-base sm:text-lg">
+            <p>
+              <span className="font-semibold">Crop type:</span> {field.crop_type}
+            </p>
+            <p>
+              <span className="font-semibold">Planting date:</span> {field.planting_date}
+            </p>
+            <p>
+              <span className="font-semibold">Current stage:</span>{' '}
+              <span className="capitalize">{field.stage}</span>
+            </p>
+            <div className="pt-1">
+              <Badge className={`${statusClassName(field.status)} text-base`}>{field.status}</Badge>
+            </div>
           </div>
-        </CardContent>
-      </Card>
+        </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Update Field</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
+        <div className="space-y-5 rounded-xl border border-black/10 bg-white p-4 shadow-sm sm:p-6">
+          <h2 className="text-2xl text-black font-semibold sm:text-3xl">Update Field</h2>
+
           <div className="space-y-2">
-            <Label>New stage</Label>
+            <Label className="text-base font-medium text-black sm:text-lg">New stage</Label>
             <Select value={newStage} onValueChange={(value) => setNewStage(value as FieldStage)}>
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full border-black/20 bg-white text-black text-base">
                 <SelectValue placeholder="Select stage" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-white text-black  border-black">
                 {allowedStages.map((stage) => (
-                  <SelectItem key={stage} value={stage}>
+                  <SelectItem
+                    key={stage}
+                    value={stage}
+                    className="capitalize text-black data-[highlighted]:bg-white/20 data-[highlighted]:text-black cursor-pointer"
+                  >
                     {stage}
                   </SelectItem>
                 ))}
@@ -121,38 +129,38 @@ export default function FieldDetailPage() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="update-note">Note</Label>
+            <Label htmlFor="update-note" className="text-base font-medium text-black sm:text-lg">Note</Label>
             <textarea
               id="update-note"
               value={note}
               onChange={(event) => setNote(event.target.value)}
-              className="w-full rounded-lg border border-input px-3 py-2 text-sm"
-              rows={4}
+              className="w-full rounded-lg border border-black/20 bg-white px-4 py-3 text-base text-black"
+              rows={5}
             />
           </div>
 
-          {error && <p className="text-sm text-red-600">{error}</p>}
+          {error && <p className="text-sm text-red-600 sm:text-base">{error}</p>}
 
-          <Button type="button" onClick={submitUpdate} disabled={submitting}>
+          <Button type="button" onClick={submitUpdate} disabled={submitting} className="text-base">
             {submitting ? 'Submitting...' : 'Submit Update'}
           </Button>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Update History</CardTitle>
+          <CardTitle className="text-2xl">Update History</CardTitle>
         </CardHeader>
         <CardContent>
           {updates.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No updates yet.</p>
+            <p className="text-base text-muted-foreground">No updates yet.</p>
           ) : (
             <ul className="space-y-3">
               {updates.map((update) => (
                 <li key={update.id} className="rounded-lg border p-3">
-                  <p className="text-sm text-muted-foreground">{new Date(update.created_at).toLocaleString()}</p>
-                  <p className="font-medium capitalize">{update.previous_stage}{' -> '}{update.new_stage}</p>
-                  {update.note && <p className="mt-1 text-sm">{update.note}</p>}
+                  <p className="text-base text-muted-foreground">{new Date(update.created_at).toLocaleString()}</p>
+                  <p className="text-lg font-medium capitalize">{update.previous_stage}{' -> '}{update.new_stage}</p>
+                  {update.note && <p className="mt-1 text-base">{update.note}</p>}
                 </li>
               ))}
             </ul>
