@@ -40,8 +40,8 @@ export default function AgentRegisterPage() {
             return
         }
 
-        if (formData.password.length < 6) {
-            setError('Password must be at least 6 characters long.')
+        if (formData.password.length < 8) {
+            setError('Password must be at least 8 characters long.')
             return
         }
 
@@ -61,7 +61,16 @@ export default function AgentRegisterPage() {
             navigate('/agent/dashboard')
         } catch (err) {
             const error = err as any
-            setError(error?.response?.data?.message || 'Failed to create account. Please try again.')
+            const backendError =
+                error?.response?.data?.detail ||
+                error?.response?.data?.message ||
+                error?.response?.data?.non_field_errors?.[0] ||
+                Object.values(error?.response?.data || {})
+                    .flat()
+                    .filter(Boolean)
+                    .join(' ')
+
+            setError(backendError || 'Failed to create account. Please try again.')
         } finally {
             setSubmitting(false)
         }
@@ -184,7 +193,7 @@ export default function AgentRegisterPage() {
                                 />
                             </div>
 
-                            {error && <p className="rounded-lg bg-red-500/10 p-3 text-sm text-red-200">{error}</p>}
+                            {error && <p className="rounded-lg bg-red-500 p-3 text-sm text-white">{error}</p>}
 
                             <Button
                                 type="submit"
