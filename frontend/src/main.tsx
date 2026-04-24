@@ -10,7 +10,10 @@ import {
 import './index.css'
 import { AuthProvider, useAuth } from '@/context/AuthContext'
 import { AppLayout } from '@/components/layout/AppLayout'
+import HomePage from './pages/HomePage'
 import LoginPage from '@/pages/LoginPage'
+import RegisterPage from './pages/RegisterPage'
+import AgentRegisterPage from './pages/AgentRegisterPage'
 import AdminDashboard from '@/pages/admin/AdminDashboard'
 import FieldsPage from '@/pages/admin/FieldsPage'
 import CreateFieldPage from '@/pages/admin/CreateFieldPage'
@@ -19,20 +22,6 @@ import MyFieldsPage from '@/pages/agent/MyFieldsPage'
 import FieldDetailPage from '@/pages/agent/FieldDetailPage'
 
 type Role = 'admin' | 'agent'
-
-function RoleRedirect() {
-  const { user, loading } = useAuth()
-
-  if (loading) {
-    return <div className="p-6">Loading...</div>
-  }
-
-  if (!user) {
-    return <Navigate to="/login" replace />
-  }
-
-  return <Navigate to={user.role === 'admin' ? '/admin/dashboard' : '/agent/dashboard'} replace />
-}
 
 function ProtectedRoute({ role }: { role: Role }) {
   const { user, loading } = useAuth()
@@ -57,14 +46,17 @@ createRoot(document.getElementById('root')!).render(
     <AuthProvider>
       <BrowserRouter>
         <Routes>
+          <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/" element={<RoleRedirect />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/register/agent" element={<AgentRegisterPage />} />
 
           <Route element={<ProtectedRoute role="admin" />}>
             <Route element={<AppLayout />}>
               <Route path="/admin/dashboard" element={<AdminDashboard />} />
               <Route path="/admin/fields" element={<FieldsPage />} />
               <Route path="/admin/fields/new" element={<CreateFieldPage />} />
+              <Route path="/admin/fields/:id" element={<FieldDetailPage />} />
             </Route>
           </Route>
 

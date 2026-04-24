@@ -41,6 +41,8 @@ class AgentListView(generics.ListAPIView):
 
 class FieldViewSet(viewsets.ModelViewSet):
 	permission_classes = [IsAuthenticated]
+	lookup_field = 'public_id'
+	lookup_value_regex = '[0-9a-fA-F-]{36}'
 
 	def get_serializer_class(self):
 		if self.action == 'list':
@@ -69,7 +71,7 @@ class FieldViewSet(viewsets.ModelViewSet):
 		instance.delete()
 
 	@action(detail=True, methods=['post'], url_path='updates')
-	def add_update(self, request, pk=None):
+	def add_update(self, request, public_id=None):
 		field = self.get_object()
 		user = request.user
 

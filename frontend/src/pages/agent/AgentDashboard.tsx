@@ -45,35 +45,38 @@ export default function AgentDashboard() {
   )
 
   return (
-    <section className="space-y-6">
-      <h1 className="text-2xl font-semibold">Agent Dashboard</h1>
+    <section className="space-y-8 text-black">
+      <div className="space-y-2">
+        <h1 className="text-3xl font-semibold tracking-tight text-black">Agent Dashboard</h1>
+        <p className="text-sm text-black/65">Overview of your assigned fields and their current status.</p>
+      </div>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        <Card>
-          <CardHeader>
-            <CardTitle>My Fields</CardTitle>
+        <Card className="border-black/10 bg-white shadow-sm">
+          <CardHeader className="border-b border-black/5">
+            <CardTitle className="text-black">My Fields</CardTitle>
           </CardHeader>
-          <CardContent className="text-3xl font-semibold">{stats.total}</CardContent>
+          <CardContent className="pt-5 text-3xl font-semibold text-black">{stats.total}</CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>At Risk</CardTitle>
+        <Card className="border-black/10 bg-white shadow-sm">
+          <CardHeader className="border-b border-black/5">
+            <CardTitle className="text-black">At Risk</CardTitle>
           </CardHeader>
-          <CardContent className="text-3xl font-semibold text-amber-600">{stats.atRisk}</CardContent>
+          <CardContent className="pt-5 text-3xl font-semibold text-amber-600">{stats.atRisk}</CardContent>
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Ready to Harvest</CardTitle>
+        <Card className="border-black/10 bg-white shadow-sm">
+          <CardHeader className="border-b border-black/5">
+            <CardTitle className="text-black">Ready to Harvest</CardTitle>
           </CardHeader>
-          <CardContent className="text-3xl font-semibold text-emerald-700">{stats.ready}</CardContent>
+          <CardContent className="pt-5 text-3xl font-semibold text-emerald-700">{stats.ready}</CardContent>
         </Card>
       </div>
 
       <div>
-        <h2 className="mb-3 text-lg font-semibold">Assigned Fields</h2>
-        {loading && <p>Loading fields...</p>}
+        <h2 className="mb-3 text-xl font-semibold tracking-tight">Assigned Fields</h2>
+        {loading && <p className="text-black/70">Loading fields...</p>}
         {error && <p className="text-red-600">{error}</p>}
 
         {!loading && !error && (
@@ -82,22 +85,22 @@ export default function AgentDashboard() {
               <CardHeader>
                 <CardTitle>No fields assigned</CardTitle>
               </CardHeader>
-              <CardContent className="text-sm text-muted-foreground">
+              <CardContent className="text-sm text-black/65">
                 You do not have assigned fields yet. Check back later.
               </CardContent>
             </Card>
           ) : (
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               {fields.map((field) => (
-                <Card key={field.id}>
-                  <CardHeader>
-                    <CardTitle>{field.name}</CardTitle>
+                <Card key={field.id} className="border-black/10 bg-white shadow-sm">
+                  <CardHeader className="border-b border-black/5">
+                    <CardTitle className="text-black">{field.name}</CardTitle>
                   </CardHeader>
-                  <CardContent className="space-y-2">
-                    <p className="text-sm text-muted-foreground">{field.crop_type}</p>
+                  <CardContent className="space-y-3 pt-5">
+                    <p className="text-sm text-black/65">{field.crop_type}</p>
                     <Badge className={stageBadgeClass(field.stage)}>{field.stage}</Badge>
                     <div>
-                      <Button asChild size="sm" variant="outline">
+                      <Button asChild size="sm" variant="outline" className="border-black text-black">
                         <Link to={`/agent/fields/${field.id}`}>View</Link>
                       </Button>
                     </div>
